@@ -1,0 +1,139 @@
+.message-wrapper {
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(45deg, #1a1a2e, #0f3460);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Envelope */
+
+.msg-envelope-container {
+    cursor: pointer;
+    animation: pulse 2s infinite;
+    text-align: center;
+}
+
+.tap-text {
+    margin-top: 20px;
+    color: white;
+    font-size: 18px;
+}
+
+.msg-envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+}
+
+.msg-envelope-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.msg-envelope-front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #e0e0e0;
+    clip-path: polygon(0 100%, 100% 100%, 50% 50%);
+}
+
+.msg-envelope-flap {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    background: #ccc;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: 0.6s;
+}
+
+.msg-envelope-container.open .msg-envelope-flap {
+    transform: rotateX(180deg);
+}
+
+/* Letter */
+
+.letter-box {
+    animation: fadeIn 1s ease;
+}
+
+.letter-card {
+    width: 500px;
+    max-width: 90vw;
+    background: #fffaf0;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+/* Happy Birthday */
+
+.birthday-text {
+    font-size: 40px;
+    color: #e94560;
+    animation: slideDown 1s ease;
+}
+
+/* Gift text */
+
+.gift-text {
+    font-size: 50px;
+    margin-top: 20px;
+    font-weight: bold;
+    background: linear-gradient(45deg, gold, pink, red);
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: glow 2s infinite;
+}
+
+/* Sub text */
+
+.sub-text {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Animations */
+
+@keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes glow {
+    0% { text-shadow: 0 0 10px gold; }
+    50% { text-shadow: 0 0 30px red; }
+    100% { text-shadow: 0 0 10px gold; }
+}
+
+/* Responsive */
+
+@media (max-width:600px) {
+
+    .birthday-text {
+        font-size: 28px;
+    }
+
+    .gift-text {
+        font-size: 35px;
+    }
+}
