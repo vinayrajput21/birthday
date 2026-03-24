@@ -194,7 +194,7 @@ const Birthday = ({ onNext }) => {
               className="svg-balloon-wrap"
               style={{
                 left: `${cfg.left}%`,
-                animationDelay: `${i * 0.35}s`,
+                animationDelay: `${i * 0.1}s`,
               }}
             >
               {/* SVG Balloon */}
@@ -273,6 +273,9 @@ const Birthday = ({ onNext }) => {
               <div key={i} className={`fuego ${candlesLit ? 'lit' : ''}`} />
             ))}
           </div>
+          <div className="cobertura" />
+
+          <div className="bizcocho" />
         </div>
       </div>
 
