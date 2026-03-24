@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import hbd2Audio from '../assets/audio/hbd4.mpeg';
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@600;700&family=Lato:wght@300;400&display=swap');
@@ -464,6 +465,10 @@ export default function MessageBox() {
     <>
       <style>{styles}</style>
       <div id="confetti-root" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 99 }} />
+
+      <audio ref={audioRef} loop>
+        <source src={hbd2Audio} type="audio/mpeg" />
+      </audio>
 
       <div className="bday-root">
         {/* Stars */}

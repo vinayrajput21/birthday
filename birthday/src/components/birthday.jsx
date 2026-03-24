@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import './birthday.css';
 import hbdAudio from '../assets/audio/hb3.mpeg';
 import banner from '../assets/images/banner.png';
-import photo1 from '../assets/images/photo1.jpg';
-// import photo2 from '../assets/images/photo2.jpg';
-// import photo3 from '../assets/images/photo3.jpg';
+import photo1 from '../assets/images/photo1.jpeg';
+import photo2 from '../assets/images/photo2.jpeg';
+import photo3 from '../assets/images/photo3.jpeg';
 import canZoom from '../assets/images/can-zoom.png';
 import person from '../assets/images/person.jpg';
 import ballonBorder from '../assets/images/Balloon-Border.png';
@@ -249,10 +249,10 @@ const Birthday = ({ onNext }) => {
       {photosVisible && (
         <>
           {[
-            { src: photo1, cls: 'album-left-1',  alt: 'Memory 1' },
             { src: photo1, cls: 'album-left-2',  alt: 'Memory 2' },
-            { src: photo1, cls: 'album-right-1', alt: 'Memory 3' },
-            { src: photo1, cls: 'album-right-2', alt: 'Memory 4' },
+            { src: photo2, cls: 'album-right-1', alt: 'Memory 3' },
+            { src: photo1, cls: 'album-left-1',  alt: 'Memory 1' },
+            { src: photo3, cls: 'album-right-2', alt: 'Memory 4' },
           ].map(({ src, cls, alt }) => (
             <img
               key={cls}
