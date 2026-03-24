@@ -14,14 +14,13 @@
 .birthday-container {
   position: relative;
   min-height: 100vh;
-  background-color: var(--bg-dark);   /* START BLACK */
+  background-color: var(--bg-dark);
   overflow: hidden;
   font-family: 'Signika', 'Lato', sans-serif;
   color: white;
-  transition: background-color 3.5s ease;  /* slow peach reveal */
+  transition: background-color 3.5s ease;
 }
 
-/* When lights are on → background becomes peach (slowly) */
 .birthday-container.lights-on {
   background-color: var(--bg-peach);
 }
@@ -39,6 +38,8 @@
   letter-spacing: 2px;
   z-index: 9999;
   transition: opacity 0.9s ease;
+  text-align: center;
+  padding: 0 20px;
 }
 
 .loading.fade-out {
@@ -60,18 +61,6 @@
   pointer-events: none;
 }
 
-/* The wire / rope across the top */
-.string-lights .wire {
-  position: absolute;
-  top: 14px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #1a1a1a, #2c2c2c, #1a1a1a);
-  border-radius: 2px;
-}
-
-/* Each hanging bulb */
 .hanging-bulb {
   position: relative;
   width: 52px;
@@ -79,14 +68,11 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center top;
-  margin-top: 14px;    /* sits on the wire */
-
-  /* Start dim/invisible */
+  margin-top: 14px;
   filter: brightness(0.15) saturate(0.3);
   transition: filter 3s ease;
 }
 
-/* Wire drop from the horizontal rope to each bulb */
 .hanging-bulb::before {
   content: '';
   position: absolute;
@@ -98,7 +84,6 @@
   background: #2c2c2c;
 }
 
-/* Bulb images */
 .hanging-bulb.yellow { background-image: url('../assets/images/bulbs/bulb_yellow.png'); }
 .hanging-bulb.red    { background-image: url('../assets/images/bulbs/bulb_red.png');    }
 .hanging-bulb.blue   { background-image: url('../assets/images/bulbs/bulb_blue.png');   }
@@ -106,13 +91,11 @@
 .hanging-bulb.pink   { background-image: url('../assets/images/bulbs/bulb_pink.png');   }
 .hanging-bulb.orange { background-image: url('../assets/images/bulbs/bulb_orange.png'); }
 
-/* ── LIGHTS ON STATE ── */
 .string-lights.on .hanging-bulb {
   filter: brightness(1.3) saturate(1.6);
   animation: bulbTwinkle 2.5s infinite alternate ease-in-out;
 }
 
-/* Stagger each bulb's twinkle slightly */
 .string-lights.on .hanging-bulb:nth-child(2)  { animation-delay: 0.0s; }
 .string-lights.on .hanging-bulb:nth-child(3)  { animation-delay: 0.3s; }
 .string-lights.on .hanging-bulb:nth-child(4)  { animation-delay: 0.6s; }
@@ -128,148 +111,92 @@
   100% { filter: brightness(1.2) saturate(1.5); transform: scale(1.0);  }
 }
 
-/* ==================== BALLOONS CONTAINER ==================== */
-.balloons-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+/* ══════════════════════════════════════════════════════════
+   BALLOONS — Complete redesign
+══════════════════════════════════════════════════════════ */
+
+.balloons-scene {
+  position: fixed;
+  inset: 0;
   pointer-events: none;
-  z-index: 6;
+  z-index: 8;
   overflow: hidden;
 }
 
-/* ==================== BALLOON BANNER (comes first) ==================== */
-.balloon-banner {
+/* ── Balloon Border strip ── */
+.balloon-border-strip {
   position: absolute;
-  bottom: -300px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 92%;
-  max-width: 1300px;
-  opacity: 0;
-  z-index: 7;
-}
-
-.balloon-banner.rise-and-shrink {
-  animation: bannerRise 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-}
-
-@keyframes bannerRise {
-  0% {
-    bottom: -300px;
-    transform: translateX(-50%) scale(0.6) rotate(-8deg);
-    opacity: 0;
-  }
-  40% {
-    bottom: 40px;
-    transform: translateX(-50%) scale(1.05) rotate(2deg);
-    opacity: 1;
-  }
-  65% {
-    bottom: 25px;
-    transform: translateX(-50%) scale(0.95) rotate(-1deg);
-  }
-  100% {
-    bottom: 120vh;
-    transform: translateX(-50%) scale(0.7) rotate(6deg);
-    opacity: 0;
-  }
-}
-
-/* ==================== FLYING BALLOONS - Much Better Animation ==================== */
-.flying-balloons {
-  position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  opacity: 0;
+  animation: borderRise 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-origin: bottom center;
 }
 
-.flying-balloons.fly {
-  animation: balloonsContainerFade 0.8s forwards;
+.balloon-border-strip img {
+  width: 100%;
+  display: block;
 }
 
-@keyframes balloonsContainerFade {
-  to { opacity: 1; }
+@keyframes borderRise {
+  0%   { transform: translateY(100%); opacity: 0; }
+  60%  { opacity: 1; }
+  100% { transform: translateY(0);    opacity: 1; }
 }
 
-.balloon {
+/* ── Individual floating balloons ── */
+.svg-balloon-wrap {
   position: absolute;
-  width: 75px;
-  height: 105px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  bottom: -150px;
-  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.35));
-  animation: balloonFloat 14s linear forwards;
+  bottom: -140px;
+  width: clamp(55px, 8vw, 85px);
+  /* Each balloon floats up with gentle sway */
+  animation:
+    balloonRise   var(--rise-dur, 9s)  var(--rise-delay, 0s) cubic-bezier(0.33, 0, 0.66, 1) forwards,
+    balloonSway   var(--sway-dur, 3.2s) var(--rise-delay, 0s) ease-in-out infinite;
   opacity: 0;
 }
 
-/* Beautiful floating with natural sway + random drift */
-@keyframes balloonFloat {
-  0% {
-    opacity: 0;
-    transform: translateY(0) translateX(0) rotate(-12deg);
-  }
-  15% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.25;
-    transform: translateY(-115vh) 
-               translateX(var(--drift)) 
-               rotate(var(--rotate-end));
-  }
+/* Override via nth-child for varied timing */
+.svg-balloon-wrap:nth-child(2)  { --rise-dur: 10s; --rise-delay: 0.0s;  --sway-dur: 3.0s; }
+.svg-balloon-wrap:nth-child(3)  { --rise-dur:  9s; --rise-delay: 0.35s; --sway-dur: 3.5s; }
+.svg-balloon-wrap:nth-child(4)  { --rise-dur: 11s; --rise-delay: 0.7s;  --sway-dur: 2.8s; }
+.svg-balloon-wrap:nth-child(5)  { --rise-dur: 9.5s;--rise-delay: 1.0s;  --sway-dur: 3.3s; }
+.svg-balloon-wrap:nth-child(6)  { --rise-dur: 10s; --rise-delay: 1.35s; --sway-dur: 2.6s; }
+.svg-balloon-wrap:nth-child(7)  { --rise-dur:  9s; --rise-delay: 1.7s;  --sway-dur: 3.6s; }
+.svg-balloon-wrap:nth-child(8)  { --rise-dur: 11s; --rise-delay: 2.0s;  --sway-dur: 3.1s; }
+
+@keyframes balloonRise {
+  0%   { opacity: 0; transform: translateY(0); }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.85; }
+  100% { opacity: 0;   transform: translateY(-115vh); }
 }
 
-/* Individual balloon positioning + variation */
-.balloon-1 { left: 10%; animation-delay: 0.3s;  --drift: 45px;  --rotate-end: 22deg; }
-.balloon-2 { left: 22%; animation-delay: 1.2s;  --drift: -55px; --rotate-end: -18deg; }
-.balloon-3 { left: 35%; animation-delay: 0.6s;  --drift: 70px;  --rotate-end: 25deg; }
-.balloon-4 { left: 52%; animation-delay: 2.1s;  --drift: -40px; --rotate-end: -15deg; }
-.balloon-5 { left: 68%; animation-delay: 1.4s;  --drift: 60px;  --rotate-end: 20deg; }
-.balloon-6 { left: 80%; animation-delay: 0.9s;  --drift: -65px; --rotate-end: -22deg; }
-.balloon-7 { left: 90%; animation-delay: 2.7s;  --drift: 35px;  --rotate-end: 18deg; }
-
-/* Letter on balloons */
-.balloon h2 {
-  position: absolute;
-  top: 38px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 32px;
-  font-weight: 900;
-  color: #BF4136;
-  text-shadow: 
-    3px 3px 0 #fff,
-    -2px -2px 0 #fff,
-    2px -2px 0 #fff,
-    -2px 2px 0 #fff;
-  opacity: 0;
-  transition: all 0.4s ease;
+@keyframes balloonSway {
+  0%   { margin-left:  0px; }
+  25%  { margin-left:  14px; }
+  50%  { margin-left:  0px; }
+  75%  { margin-left: -14px; }
+  100% { margin-left:  0px; }
 }
 
-.balloon h2.show-letter {
-  opacity: 1;
-  animation: letterPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.svg-balloon {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
+  /* Gentle wobble on the balloon itself */
+  animation: balloonWobble 2.4s ease-in-out infinite;
 }
 
-@keyframes letterPop {
-  0% {
-    transform: translateX(-50%) scale(0.2) rotate(-20deg);
-    opacity: 0;
-  }
-  70% {
-    transform: translateX(-50%) scale(1.2) rotate(8deg);
-  }
-  100% {
-    transform: translateX(-50%) scale(1) rotate(0deg);
-    opacity: 1;
-  }
+.svg-balloon-wrap:nth-child(odd)  .svg-balloon { animation-direction: alternate; }
+.svg-balloon-wrap:nth-child(even) .svg-balloon { animation-direction: alternate-reverse; }
+
+@keyframes balloonWobble {
+  0%   { transform: rotate(-4deg) scaleX(0.97); }
+  50%  { transform: rotate(4deg)  scaleX(1.03); }
+  100% { transform: rotate(-4deg) scaleX(0.97); }
 }
+
 /* ── BANNER ────────────────────────────────────────────────── */
 .banner-wrap {
   position: absolute;
@@ -371,7 +298,6 @@
   border-radius: 300px;
 }
 
-/* Candle body */
 .velas {
   position: absolute;
   top: 44%;
@@ -396,7 +322,6 @@
 .velas::after  { top: 25%; }
 .velas::before { top: 50%; }
 
-/* Flame */
 .fuego {
   display: none;
   position: absolute;
@@ -414,19 +339,16 @@
 .fuego:nth-child(2) { animation-duration: 1.3s; }
 .fuego:nth-child(3) { animation-duration: 1.0s; }
 
-.fuego.lit {
-  display: block;
-}
+.fuego.lit { display: block; }
 
 @keyframes flameDance {
-  0%   { transform: translateX(-50%) scaleX(1)   scaleY(1)    rotate(-3deg); }
+  0%   { transform: translateX(-50%) scaleX(1)    scaleY(1)    rotate(-3deg); }
   25%  { transform: translateX(-50%) scaleX(0.85) scaleY(1.15) rotate(2deg); }
   50%  { transform: translateX(-50%) scaleX(1.1)  scaleY(0.9)  rotate(-2deg); }
   75%  { transform: translateX(-50%) scaleX(0.9)  scaleY(1.1)  rotate(3deg); }
-  100% { transform: translateX(-50%) scaleX(1)   scaleY(1)    rotate(-3deg); }
+  100% { transform: translateX(-50%) scaleX(1)    scaleY(1)    rotate(-3deg); }
 }
 
-/* Frosting */
 .cobertura {
   position: absolute;
   top: 58%;
@@ -451,7 +373,6 @@
 .cobertura::after  { top: 22px; right: 48px; }
 .cobertura::before { top: 28px; right: 32px; }
 
-/* Cake sponge */
 .bizcocho {
   position: absolute;
   bottom: 0;
@@ -475,7 +396,6 @@
 .bizcocho::after  { top: 32%; }
 .bizcocho::before { top: 62%; }
 
-/* Profile picture on cake */
 .profile-img {
   position: absolute;
   bottom: 25px;
@@ -525,11 +445,15 @@
   align-items: center;
   justify-content: center;
   min-height: 60px;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .btn {
   padding: 14px 32px;
   min-width: 280px;
+  max-width: 100%;
   background: linear-gradient(135deg, var(--btn-color), #3a58a0);
   color: #fff;
   border: none;
@@ -542,6 +466,8 @@
   transition: all 0.3s ease;
   box-shadow: 0 6px 20px rgba(0,0,0,0.35);
   animation: btnPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 @keyframes btnPop {
@@ -556,10 +482,12 @@
 }
 
 .btn:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.97);
 }
 
-/* ── LIGHTBOX ──────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════
+   LIGHTBOX — Fixed with close button
+══════════════════════════════════════════════════════════ */
 .lightbox {
   display: none;
   position: fixed;
@@ -583,10 +511,11 @@
 
 .lightbox img {
   max-width: 90%;
-  max-height: 90%;
+  max-height: 85%;
   border-radius: 14px;
   box-shadow: 0 14px 50px rgba(0,0,0,0.7);
   animation: lightboxZoomIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: default;
 }
 
 @keyframes lightboxZoomIn {
@@ -594,16 +523,168 @@
   to   { transform: scale(1);   opacity: 1; }
 }
 
-/* ── RESPONSIVE ────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .cake { transform: scale(0.8); transform-origin: bottom center; }
-  .album-photo { width: 180px; }
-  .message p { font-size: 32px; }
-  .hanging-bulb { width: 38px; height: 56px; }
-  .btn { min-width: 240px; font-size: 13px; }
-  .banner-wrap img { max-width: 95vw; }
-  .album-left-1  { left: 5px; }
-  .album-left-2  { left: 5px; }
-  .album-right-1 { right: 5px; }
-  .album-right-2 { right: 5px; }
+/* ── Close button ── */
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, border-color 0.2s;
+  z-index: 10000;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lightbox-close:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: #fff;
+  transform: scale(1.1) rotate(90deg);
+}
+
+.lightbox-close:active {
+  transform: scale(0.95);
+}
+
+/* ── Tap-to-close hint ── */
+.lightbox::after {
+  content: "Tap outside or ✕ to close";
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.4);
+  font-size: 13px;
+  font-family: 'Signika', sans-serif;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — TABLET  (≤ 900px)
+══════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .album-photo { width: 200px; }
+  .album-left-1  { top: 80px;  left: 10px; }
+  .album-left-2  { top: 270px; left: 20px; }
+  .album-right-1 { top: 80px;  right: 10px; }
+  .album-right-2 { top: 270px; right: 20px; }
+  .can-zoom { right: 20px; top: 390px; width: 130px; }
+  .message p { font-size: 36px; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE  (≤ 600px)
+══════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+
+  /* Loading */
+  .loading { font-size: 16px; letter-spacing: 1px; }
+
+  /* String lights */
+  .string-lights { height: 80px; }
+  .hanging-bulb  { width: 30px; height: 45px; margin-top: 10px; }
+  .hanging-bulb::before { height: 10px; top: -10px; }
+
+  /* Balloons — smaller on mobile */
+  .svg-balloon-wrap { width: clamp(42px, 10vw, 60px); }
+  @keyframes balloonSway {
+    0%   { margin-left:  0px; }
+    25%  { margin-left:  8px; }
+    50%  { margin-left:  0px; }
+    75%  { margin-left: -8px; }
+    100% { margin-left:  0px; }
+  }
+
+  /* Banner */
+  .banner-wrap { top: 85px; }
+  .banner-wrap img { max-width: 98vw; }
+
+  /* Album photos */
+  .album-photo {
+    width: 110px;
+    border-width: 3px;
+    border-radius: 8px;
+  }
+  .album-left-1  { top: 95px;  left: 4px;  transform: rotate(-5deg); }
+  .album-left-2  { top: 230px; left: 4px;  transform: rotate(4deg);  }
+  .album-right-1 { top: 95px;  right: 4px; transform: rotate(5deg);  }
+  .album-right-2 { top: 230px; right: 4px; transform: rotate(-4deg); }
+
+  .can-zoom { right: 4px; top: 340px; width: 80px; opacity: 0.65; }
+
+  /* Lightbox close */
+  .lightbox-close { top: 14px; right: 14px; width: 38px; height: 38px; font-size: 16px; }
+  .lightbox img   { max-width: 95%; max-height: 82%; border-radius: 10px; }
+  .lightbox::after { font-size: 11px; bottom: 14px; }
+
+  /* Cake */
+  .cake-wrapper { top: 52%; transform: translate(-50%, -42%); }
+  .cake         { width: 200px; height: 200px; }
+  .cake::after  { width: 200px; }
+  .velas        { width: 11px; height: 40px; }
+  .fuego        { width: 15px; height: 26px; top: -16px; }
+  .cobertura    { width: 115px; height: 26px; }
+  .cobertura::after  { width: 11px; height: 22px; right: 32px; top: 16px; }
+  .cobertura::before { width: 11px; height: 22px; right: 20px; top: 20px; }
+  .bizcocho     { width: 100px; height: 68px; }
+
+  .profile-img {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -100px;
+    width: 88px;
+    height: 88px;
+    border-width: 3px;
+    border-radius: 10px;
+  }
+
+  .cake-wrapper.visible { margin-bottom: 110px; }
+
+  /* Message */
+  .message { width: 92%; padding: 0 8px; }
+  .message p { font-size: 24px; margin: 12px 0; }
+
+  /* Button */
+  .control-panel { bottom: 24px; padding: 0 16px; }
+  .btn {
+    min-width: 0;
+    width: 100%;
+    font-size: 14px;
+    padding: 14px 20px;
+    border-radius: 40px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE  (≤ 380px)
+══════════════════════════════════════════════════════════ */
+@media (max-width: 380px) {
+  .album-photo    { width: 90px; }
+  .album-left-2   { top: 210px; }
+  .album-right-2  { top: 210px; }
+  .can-zoom       { width: 65px; top: 310px; }
+
+  .svg-balloon-wrap { width: 38px; }
+
+  .cake         { width: 170px; height: 170px; }
+  .cake::after  { width: 170px; }
+  .bizcocho     { width: 86px; height: 58px; }
+  .cobertura    { width: 98px; }
+
+  .profile-img { width: 74px; height: 74px; bottom: -86px; }
+
+  .message p { font-size: 20px; }
+  .btn        { font-size: 13px; padding: 12px 16px; }
 }

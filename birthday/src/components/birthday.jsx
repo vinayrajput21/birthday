@@ -3,13 +3,13 @@ import './birthday.css';
 import hbdAudio from '../assets/audio/hbd.mp3';
 import banner from '../assets/images/banner.png';
 import photo1 from '../assets/images/photo1.jpg';
-// import photo2 from '../assets/images/photo1.jpg';
-// import photo3 from '../assets/images/photo1.jpg';
+// import photo2 from '../assets/images/photo2.jpg';
+// import photo3 from '../assets/images/photo3.jpg';
 import canZoom from '../assets/images/can-zoom.png';
 import person from '../assets/images/person.jpg';
-import ballonBorder from '../assets/images/Balloon-Border.png'
+import ballonBorder from '../assets/images/Balloon-Border.png';
 
-const Birthday = () => {
+const Birthday = ({ onNext }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [lightsOn, setLightsOn] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
@@ -22,21 +22,23 @@ const Birthday = () => {
   const [photosVisible, setPhotosVisible] = useState(false);
   const [wishDone, setWishDone] = useState(false);
 
+  // Lightbox state (React-controlled instead of classList)
+  const [lightboxSrc, setLightboxSrc] = useState('');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
   const audioRef = useRef(null);
   const messageRefs = useRef([]);
-  const lightboxRef = useRef(null);
-  const lightboxImgRef = useRef(null);
   const containerRef = useRef(null);
 
   const buttons = [
-    { text: "✨ Turn On Lights", action: "lights" },
-    { text: "🎵 Play the Music Buddy", action: "music" },
-    { text: "🎉 Let's Decorate", action: "banner" },
+    { text: "✨ Turn On Lights",      action: "lights"   },
+    { text: "🎵 Play the Music Buddy", action: "music"    },
+    { text: "🎉 Let's Decorate",       action: "banner"   },
     { text: "🎈 I got you some Balloons", action: "balloons" },
-    { text: "🎂 Cake? Of course!", action: "cake" },
-    { text: "🕯️ Light the Candles", action: "candle" },
-    { text: "🥳 Happy Birthday!", action: "wish" },
-    { text: "💌 A Message for You", action: "story" },
+    { text: "🎂 Cake? Of course!",     action: "cake"     },
+    { text: "🕯️ Light the Candles",   action: "candle"   },
+    { text: "🥳 Happy Birthday!",      action: "wish"     },
+    { text: "💌 A Message for You",    action: "story"    },
   ];
 
   const messages = [
@@ -49,39 +51,35 @@ const Birthday = () => {
 
   // Loading fade-out
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoadingDone(true);
-    }, 1000);
+    const timer = setTimeout(() => setLoadingDone(true), 1000);
     return () => clearTimeout(timer);
   }, []);
 
-  // Lightbox setup
+  // Prevent body scroll on mobile
   useEffect(() => {
-    const lightbox = lightboxRef.current;
-    const img = lightboxImgRef.current;
-    if (!lightbox || !img) return;
-
-    const close = (e) => {
-      if (e.target === lightbox) lightbox.classList.remove('show');
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
     };
-    lightbox.addEventListener('click', close);
-    return () => lightbox.removeEventListener('click', close);
   }, []);
 
-  // Attach lightbox to photos when visible
+  // Close lightbox on Escape key
   useEffect(() => {
-    if (!photosVisible) return;
-    const photos = document.querySelectorAll('.album-photo');
-    const img = lightboxImgRef.current;
-    const lightbox = lightboxRef.current;
+    const onKey = (e) => { if (e.key === 'Escape') setLightboxOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
-    const open = (e) => {
-      img.src = e.target.src;
-      lightbox.classList.add('show');
-    };
-    photos.forEach(p => p.addEventListener('click', open));
-    return () => photos.forEach(p => p.removeEventListener('click', open));
-  }, [photosVisible]);
+  const openLightbox = (src) => {
+    setLightboxSrc(src);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => setLightboxOpen(false);
 
   const showNextButton = (delay = 800) => {
     setTimeout(() => setCurrentStep(prev => prev + 1), delay);
@@ -90,9 +88,7 @@ const Birthday = () => {
   const handleButtonClick = (action) => {
     switch (action) {
       case "lights":
-        setTimeout(() => {
-          setLightsOn(true);
-        }, 800);
+        setTimeout(() => setLightsOn(true), 800);
         showNextButton(2000);
         break;
 
@@ -106,19 +102,14 @@ const Birthday = () => {
 
       case "banner":
         setBannerVisible(true);
-  setPhotosVisible(true);
-  
-  // Trigger balloons after banner has risen (approx 4.5s)
-  setTimeout(() => {
-    setBalloonsFlying(true);
-  }, 4800);   // <- increased a bit so small balloons start after banner finishes rising
-
-  showNextButton(900);
+        setPhotosVisible(true);
+        setTimeout(() => setBalloonsFlying(true), 4800);
+        showNextButton(900);
         break;
 
       case "balloons":
-       setBalloonsFlying(true);
-  showNextButton(2800);
+        setBalloonsFlying(true);
+        showNextButton(2800);
         break;
 
       case "cake":
@@ -137,32 +128,36 @@ const Birthday = () => {
         break;
 
       case "story":
-  setTimeout(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.style.transition = 'opacity 1.2s ease-in-out';
-      container.style.opacity = '0';
-    }
-    
-    setTimeout(() => {
-      // This will trigger the parent to switch components
-      if (window.switchToLetter) {
-        window.switchToLetter();
-      }
-    }, 1200);
-  }, 800);
+        setTimeout(() => {
+          const container = containerRef.current;
+          if (container) {
+            container.style.transition = "opacity 1.2s ease-in-out";
+            container.style.opacity = "0";
+          }
+          setTimeout(() => onNext(), 1200);
+        }, 800);
+        break;
 
       default:
         break;
     }
   };
 
+  // Balloon config: letter, color pair [body, shine], left%
+  const balloonConfig = [
+    { letter: 'H', body: '#FF6B6B', shine: '#FFB3B3', left: 8  },
+    { letter: 'B', body: '#FFD93D', shine: '#FFF0A0', left: 20 },
+    { letter: 'D', body: '#6BCB77', shine: '#B3F0BA', left: 33 },
+    { letter: 'B', body: '#4D96FF', shine: '#A8CBFF', left: 46 },
+    { letter: 'A', body: '#FF6BCC', shine: '#FFB3EA', left: 59 },
+    { letter: 'B', body: '#FF9F43', shine: '#FFD4A0', left: 72 },
+    { letter: 'Y', body: '#A29BFE', shine: '#D4CFFF', left: 85 },
+  ];
+
   return (
     <div
       ref={containerRef}
-      className={`birthday-container 
-        ${lightsOn ? 'lights-on' : ''}
-      `}
+      className={`birthday-container ${lightsOn ? 'lights-on' : ''}`}
     >
       {/* Loading Screen */}
       <div className={`loading ${loadingDone ? 'fade-out' : ''}`}>
@@ -171,59 +166,102 @@ const Birthday = () => {
 
       {/* Audio */}
       <audio ref={audioRef} loop>
-         <source src={hbdAudio} type="audio/mpeg" />
+        <source src={hbdAudio} type="audio/mpeg" />
       </audio>
 
+      {/* ===== STRING LIGHTS ===== */}
       <div className={`string-lights ${lightsOn ? 'on' : ''}`}>
-        {['yellow', 'red', 'blue', 'green', 'pink', 'orange', 'yellow', 'red'].map((color, i) => (
+        {['yellow','red','blue','green','pink','orange','yellow','red'].map((color, i) => (
           <div
             key={i}
             className={`hanging-bulb ${color}`}
-            style={{ animationDelay: `${i * 0.1}s` }}
+            style={{ animationDelay: `${i * 0.15}s` }}
           />
         ))}
       </div>
 
-{/* ===== BALLOONS ===== */}
-<div className={`balloons-container ${balloonsFlying ? 'active' : ''}`}>
+      {/* ===== BALLOONS ===== */}
+      {balloonsFlying && (
+        <div className="balloons-scene">
+          {/* Balloon Border strip at bottom */}
+          <div className="balloon-border-strip">
+            <img src={ballonBorder} alt="Balloon Border" />
+          </div>
 
-  {/* 1. Balloon Banner - comes from bottom to top */}
-  <div className={`balloon-banner ${balloonsFlying ? 'rise-and-shrink' : ''}`}>
-    <img 
-      src={ballonBorder}
-      alt="Balloon Banner" 
-    />
-  </div>
-
-  {/* 2. Flying individual balloons - appear after banner */}
-  <div className={`flying-balloons ${balloonsFlying ? 'fly' : ''}`}>
-    {['H', 'B', 'D', 'B', 'A', 'B', 'Y'].map((letter, i) => (
-      <div
-        key={i}
-        className={`balloon balloon-${i + 1}`}
-        style={{
-          '--delay': `${2 + i * 0.5}s`,     // start after banner animation
-          '--left': `${12 + i * 11}%`,      // nicely spread
-        }}
-      >
-        <h2 className={wishDone ? 'show-letter' : ''}>{letter}</h2>
-      </div>
-    ))}
-  </div>
-</div>
+          {/* Individual SVG balloons floating up */}
+          {balloonConfig.map((cfg, i) => (
+            <div
+              key={i}
+              className="svg-balloon-wrap"
+              style={{
+                left: `${cfg.left}%`,
+                animationDelay: `${i * 0.35}s`,
+              }}
+            >
+              {/* SVG Balloon */}
+              <svg
+                className="svg-balloon"
+                viewBox="0 0 80 110"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Balloon body */}
+                <ellipse cx="40" cy="44" rx="32" ry="38" fill={cfg.body} />
+                {/* Shine */}
+                <ellipse cx="29" cy="28" rx="9" ry="13" fill={cfg.shine} opacity="0.55" transform="rotate(-20 29 28)" />
+                {/* Knot */}
+                <ellipse cx="40" cy="82" rx="5" ry="4" fill={cfg.body} />
+                {/* String */}
+                <path
+                  d="M40 86 Q36 96 40 106"
+                  stroke="#999"
+                  strokeWidth="1.5"
+                  fill="none"
+                  strokeLinecap="round"
+                />
+                {/* Letter — only show after wishDone */}
+                {wishDone && (
+                  <text
+                    x="40"
+                    y="52"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    fontFamily="'Signika', sans-serif"
+                    fontWeight="900"
+                    fontSize="28"
+                    fill="#fff"
+                    style={{ textShadow: 'none' }}
+                  >
+                    {cfg.letter}
+                  </text>
+                )}
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* ===== BANNER ===== */}
-<div className={`banner-wrap ${bannerVisible ? 'come' : ''}`}>
-  <img src={banner} alt="Happy Birthday Banner" />
-</div>
+      <div className={`banner-wrap ${bannerVisible ? 'come' : ''}`}>
+        <img src={banner} alt="Happy Birthday Banner" />
+      </div>
 
       {/* ===== ALBUM PHOTOS ===== */}
       {photosVisible && (
         <>
-          <img src={photo1} className="album-photo album-left-1" alt="Memory 1" />
-          <img src={photo1} className="album-photo album-left-2" alt="Memory 2" />
-          <img src={photo1} className="album-photo album-right-1" alt="Memory 3" />
-          <img src={photo1} className="album-photo album-right-2" alt="Memory 4" />
+          {[
+            { src: photo1, cls: 'album-left-1',  alt: 'Memory 1' },
+            { src: photo1, cls: 'album-left-2',  alt: 'Memory 2' },
+            { src: photo1, cls: 'album-right-1', alt: 'Memory 3' },
+            { src: photo1, cls: 'album-right-2', alt: 'Memory 4' },
+          ].map(({ src, cls, alt }) => (
+            <img
+              key={cls}
+              src={src}
+              className={`album-photo ${cls}`}
+              alt={alt}
+              onClick={() => openLightbox(src)}
+            />
+          ))}
           <img src={canZoom} className="can-zoom" alt="Click to zoom" />
         </>
       )}
@@ -269,10 +307,30 @@ const Birthday = () => {
         )}
       </div>
 
-      {/* ===== LIGHTBOX ===== */}
-      <div ref={lightboxRef} className="lightbox">
-        <img ref={lightboxImgRef} src="" alt="Zoomed Memory" />
-      </div>
+      {/* ===== LIGHTBOX (React-controlled) ===== */}
+      {lightboxOpen && (
+        <div
+          className="lightbox show"
+          onClick={closeLightbox}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Zoomed photo"
+        >
+          {/* Close button */}
+          <button
+            className="lightbox-close"
+            onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
+            aria-label="Close"
+          >
+            ✕
+          </button>
+          <img
+            src={lightboxSrc}
+            alt="Zoomed Memory"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </div>
   );
 };
