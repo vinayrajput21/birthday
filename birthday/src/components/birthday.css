@@ -47,6 +47,28 @@
   pointer-events: none;
 }
 
+/* Loading inner — stacks image above text */
+.loading-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+/* Bday image shown inside loading screen */
+.loading-bday-img {
+  width: clamp(180px, 55vw, 340px);
+  border-radius: 18px;
+  box-shadow: 0 8px 40px rgba(255, 100, 150, 0.35);
+  animation: bdayImgReveal 0.9s ease 0.3s both;
+  object-fit: cover;
+}
+
+@keyframes bdayImgReveal {
+  from { opacity: 0; transform: scale(0.88) translateY(18px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
 /* ── STRING LIGHTS ─────────────────────────────────────────── */
 .string-lights {
   position: fixed;
@@ -112,9 +134,8 @@
 }
 
 /* ══════════════════════════════════════════════════════════
-   BALLOONS — Complete redesign
+   BALLOONS
 ══════════════════════════════════════════════════════════ */
-
 .balloons-scene {
   position: fixed;
   inset: 0;
@@ -123,47 +144,23 @@
   overflow: hidden;
 }
 
-/* ── Balloon Border strip ── */
-.balloon-border-strip {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  animation: borderRise 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  transform-origin: bottom center;
-}
-
-.balloon-border-strip img {
-  width: 100%;
-  display: block;
-}
-
-@keyframes borderRise {
-  0%   { transform: translateY(100%); opacity: 0; }
-  60%  { opacity: 1; }
-  100% { transform: translateY(0);    opacity: 1; }
-}
-
-/* ── Individual floating balloons ── */
 .svg-balloon-wrap {
   position: absolute;
   bottom: -140px;
   width: clamp(55px, 8vw, 85px);
-  /* Each balloon floats up with gentle sway */
   animation:
     balloonRise   var(--rise-dur, 9s)  var(--rise-delay, 0s) cubic-bezier(0.33, 0, 0.66, 1) forwards,
     balloonSway   var(--sway-dur, 3.2s) var(--rise-delay, 0s) ease-in-out infinite;
   opacity: 0;
 }
 
-/* Override via nth-child for varied timing */
-.svg-balloon-wrap:nth-child(2)  { --rise-dur: 10s; --rise-delay: 0.0s;  --sway-dur: 3.0s; }
-.svg-balloon-wrap:nth-child(3)  { --rise-dur:  9s; --rise-delay: 0.35s; --sway-dur: 3.5s; }
-.svg-balloon-wrap:nth-child(4)  { --rise-dur: 11s; --rise-delay: 0.7s;  --sway-dur: 2.8s; }
-.svg-balloon-wrap:nth-child(5)  { --rise-dur: 9.5s;--rise-delay: 1.0s;  --sway-dur: 3.3s; }
-.svg-balloon-wrap:nth-child(6)  { --rise-dur: 10s; --rise-delay: 1.35s; --sway-dur: 2.6s; }
-.svg-balloon-wrap:nth-child(7)  { --rise-dur:  9s; --rise-delay: 1.7s;  --sway-dur: 3.6s; }
-.svg-balloon-wrap:nth-child(8)  { --rise-dur: 11s; --rise-delay: 2.0s;  --sway-dur: 3.1s; }
+.svg-balloon-wrap:nth-child(2)  { --rise-dur: 10s;  --rise-delay: 0.0s;  --sway-dur: 3.0s; }
+.svg-balloon-wrap:nth-child(3)  { --rise-dur: 9s;   --rise-delay: 0.35s; --sway-dur: 3.5s; }
+.svg-balloon-wrap:nth-child(4)  { --rise-dur: 11s;  --rise-delay: 0.7s;  --sway-dur: 2.8s; }
+.svg-balloon-wrap:nth-child(5)  { --rise-dur: 9.5s; --rise-delay: 1.0s;  --sway-dur: 3.3s; }
+.svg-balloon-wrap:nth-child(6)  { --rise-dur: 10s;  --rise-delay: 1.35s; --sway-dur: 2.6s; }
+.svg-balloon-wrap:nth-child(7)  { --rise-dur: 9s;   --rise-delay: 1.7s;  --sway-dur: 3.6s; }
+.svg-balloon-wrap:nth-child(8)  { --rise-dur: 11s;  --rise-delay: 2.0s;  --sway-dur: 3.1s; }
 
 @keyframes balloonRise {
   0%   { opacity: 0; transform: translateY(0); }
@@ -184,7 +181,6 @@
   width: 100%;
   height: auto;
   filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
-  /* Gentle wobble on the balloon itself */
   animation: balloonWobble 2.4s ease-in-out infinite;
 }
 
@@ -250,10 +246,10 @@
   z-index: 20;
 }
 
-.album-left-1  { top: 90px;  left: 30px;  transform: rotate(-6deg); }
-.album-left-2  { top: 310px; left: 55px;  transform: rotate(5deg);  }
-.album-right-1 { top: 90px;  right: 30px; transform: rotate(6deg);  }
-.album-right-2 { top: 310px; right: 55px; transform: rotate(-5deg); }
+.album-left-1  { top: 1500px; left: 30px;  transform: rotate(-6deg); }
+.album-left-2  { top: 310px;  left: 55px;  transform: rotate(5deg);  }
+.album-right-1 { top: 150px;  right: 30px; transform: rotate(6deg);  }
+.album-right-2 { top: 310px;  right: 55px; transform: rotate(-5deg); }
 
 .can-zoom {
   position: absolute;
@@ -349,6 +345,7 @@
   100% { transform: translateX(-50%) scaleX(1)    scaleY(1)    rotate(-3deg); }
 }
 
+/* ── Cobertura (frosting) — red/pink tones ── */
 .cobertura {
   position: absolute;
   top: 58%;
@@ -356,7 +353,7 @@
   transform: translateX(-50%);
   width: 170px;
   height: 38px;
-  background: #ece7e3;
+  background: #ff6b6b;       /* red frosting */
   border-radius: 150px;
   z-index: 15;
 }
@@ -365,7 +362,7 @@
 .cobertura::before {
   content: "";
   position: absolute;
-  background: #ece7e3;
+  background: #ff6b6b;
   border-radius: 300px;
   width: 16px;
   height: 32px;
@@ -373,6 +370,7 @@
 .cobertura::after  { top: 22px; right: 48px; }
 .cobertura::before { top: 28px; right: 32px; }
 
+/* ── Bizcocho (cake body) — red ── */
 .bizcocho {
   position: absolute;
   bottom: 0;
@@ -380,7 +378,7 @@
   transform: translateX(-50%);
   width: 150px;
   height: 100px;
-  background: #6d3826;
+  background: #c0392b;       /* red cake */
   border-radius: 8px 8px 0 0;
 }
 
@@ -391,7 +389,7 @@
   left: 0;
   width: 100%;
   height: 16px;
-  background: rgba(236, 231, 227, 0.65);
+  background: rgba(255, 107, 107, 0.55);  /* lighter red stripe */
 }
 .bizcocho::after  { top: 32%; }
 .bizcocho::before { top: 62%; }
@@ -450,9 +448,10 @@
   box-sizing: border-box;
 }
 
+/* ── BUTTON — bigger text & icon ── */
 .btn {
-  padding: 14px 32px;
-  min-width: 280px;
+  padding: 16px 36px;
+  min-width: 300px;
   max-width: 100%;
   background: #f175bd;
   color: #fff;
@@ -460,7 +459,7 @@
   border-radius: 50px;
   font-family: 'Signika', sans-serif;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 19px;          /* ↑ was 15px */
   letter-spacing: 0.5px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -468,6 +467,7 @@
   animation: btnPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  line-height: 1.3;
 }
 
 @keyframes btnPop {
@@ -486,7 +486,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════
-   LIGHTBOX — Fixed with close button
+   LIGHTBOX
 ══════════════════════════════════════════════════════════ */
 .lightbox {
   display: none;
@@ -523,7 +523,6 @@
   to   { transform: scale(1);   opacity: 1; }
 }
 
-/* ── Close button ── */
 .lightbox-close {
   position: absolute;
   top: 20px;
@@ -551,11 +550,8 @@
   transform: scale(1.1) rotate(90deg);
 }
 
-.lightbox-close:active {
-  transform: scale(0.95);
-}
+.lightbox-close:active { transform: scale(0.95); }
 
-/* ── Tap-to-close hint ── */
 .lightbox::after {
   content: "Tap outside or ✕ to close";
   position: absolute;
@@ -574,13 +570,13 @@
    RESPONSIVE — TABLET  (≤ 900px)
 ══════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .album-photo { width: 200px; }
+  .album-photo   { width: 200px; }
   .album-left-1  { top: 80px;  left: 10px; }
   .album-left-2  { top: 270px; left: 20px; }
   .album-right-1 { top: 80px;  right: 10px; }
   .album-right-2 { top: 270px; right: 20px; }
-  .can-zoom { right: 20px; top: 390px; width: 130px; }
-  .message p { font-size: 36px; }
+  .can-zoom      { right: 20px; top: 390px; width: 130px; }
+  .message p     { font-size: 36px; }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -589,14 +585,15 @@
 @media (max-width: 600px) {
 
   /* Loading */
-  .loading { font-size: 16px; letter-spacing: 1px; }
+  .loading        { font-size: 16px; letter-spacing: 1px; }
+  .loading-bday-img { width: clamp(140px, 72vw, 260px); }
 
   /* String lights */
   .string-lights { height: 80px; }
   .hanging-bulb  { width: 30px; height: 45px; margin-top: 10px; }
   .hanging-bulb::before { height: 10px; top: -10px; }
 
-  /* Balloons — smaller on mobile */
+  /* Balloons */
   .svg-balloon-wrap { width: clamp(42px, 10vw, 60px); }
   @keyframes balloonSway {
     0%   { margin-left:  0px; }
@@ -606,24 +603,41 @@
     100% { margin-left:  0px; }
   }
 
-  /* Banner */
+  /*
+   * BANNER — shrinks to ~60vw so it doesn't clobber the corner photos.
+   * Sits at top: 85px (below string lights).
+   * Added a 0.5 s scale-in animation for the polished feel requested.
+   */
   .banner-wrap { top: 85px; }
-  .banner-wrap img { max-width: 98vw; }
+  .banner-wrap img {
+    max-width: 62vw;          /* ← smaller banner avoids overlap */
+    width: 62vw;
+    animation: bannerScaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+  }
 
-  /* Album photos */
+  @keyframes bannerScaleIn {
+    from { transform: scale(0.6); opacity: 0.4; }
+    to   { transform: scale(1);   opacity: 1;   }
+  }
+
+  /*
+   * ALBUM PHOTOS — pushed down so they start below the banner's
+   * settled position (~85px top + ~80px banner height + gap = ~185px).
+   * Row 1: ~190px, Row 2: ~310px — no overlap.
+   */
   .album-photo {
     width: 110px;
     border-width: 3px;
     border-radius: 8px;
   }
-  .album-left-1  { top: 95px;  left: 4px;  transform: rotate(-5deg); }
-  .album-left-2  { top: 230px; left: 4px;  transform: rotate(4deg);  }
-  .album-right-1 { top: 95px;  right: 4px; transform: rotate(5deg);  }
-  .album-right-2 { top: 230px; right: 4px; transform: rotate(-4deg); }
+  .album-left-1  { top: 310px; left: 4px;  transform: rotate(-5deg); }
+  .album-left-2  { top: 190px; left: 4px;  transform: rotate(4deg);  }
+  .album-right-1 { top: 190px; right: 4px; transform: rotate(5deg);  }
+  .album-right-2 { top: 310px; right: 4px; transform: rotate(-4deg); }
 
-  .can-zoom { right: 4px; top: 340px; width: 80px; opacity: 0.65; }
+  .can-zoom { right: 4px; top: 420px; width: 80px; opacity: 0.65; }
 
-  /* Lightbox close */
+  /* Lightbox */
   .lightbox-close { top: 14px; right: 14px; width: 38px; height: 38px; font-size: 16px; }
   .lightbox img   { max-width: 95%; max-height: 82%; border-radius: 10px; }
   .lightbox::after { font-size: 11px; bottom: 14px; }
@@ -653,7 +667,7 @@
   .cake-wrapper.visible { margin-bottom: 110px; }
 
   /* Message */
-  .message { width: 92%; padding: 0 8px; }
+  .message   { width: 92%; padding: 0 8px; }
   .message p { font-size: 24px; margin: 12px 0; }
 
   /* Button */
@@ -661,8 +675,8 @@
   .btn {
     min-width: 0;
     width: 100%;
-    font-size: 14px;
-    padding: 14px 20px;
+    font-size: 17px;          /* ↑ bigger on mobile too */
+    padding: 15px 20px;
     border-radius: 40px;
   }
 }
@@ -671,10 +685,14 @@
    RESPONSIVE — SMALL MOBILE  (≤ 380px)
 ══════════════════════════════════════════════════════════ */
 @media (max-width: 380px) {
+  .banner-wrap img  { max-width: 58vw; width: 58vw; }
+
   .album-photo    { width: 90px; }
-  .album-left-2   { top: 210px; }
-  .album-right-2  { top: 210px; }
-  .can-zoom       { width: 65px; top: 310px; }
+  .album-left-2   { top: 180px; }
+  .album-right-1  { top: 180px; }
+  .album-left-1   { top: 285px; }
+  .album-right-2  { top: 285px; }
+  .can-zoom       { width: 65px; top: 385px; }
 
   .svg-balloon-wrap { width: 38px; }
 
@@ -686,5 +704,5 @@
   .profile-img { width: 74px; height: 74px; bottom: -86px; }
 
   .message p { font-size: 20px; }
-  .btn        { font-size: 13px; padding: 12px 16px; }
+  .btn        { font-size: 15px; padding: 13px 16px; }
 }

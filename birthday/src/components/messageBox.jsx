@@ -506,7 +506,7 @@ export default function MessageBox() {
                 <div className="env-left" />
                 <div className="env-right" />
                 <div className="env-bottom" />
-                <div className="env-seal">🎊</div>
+                <div className="env-seal">🌸</div>
                 <div className="env-flap" />
               </div>
               <p className="tap-hint">✦ Tap to open your letter ✦</p>

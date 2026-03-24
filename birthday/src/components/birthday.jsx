@@ -5,6 +5,7 @@ import banner from '../assets/images/banner.png';
 import photo1 from '../assets/images/photo1.jpeg';
 import photo2 from '../assets/images/photo2.jpeg';
 import photo3 from '../assets/images/photo3.jpeg';
+import bdayImg from '../assets/images/bday.jpeg';
 import canZoom from '../assets/images/can-zoom.png';
 
 
@@ -21,7 +22,7 @@ const Birthday = ({ onNext }) => {
   const [photosVisible, setPhotosVisible] = useState(false);
   const [wishDone, setWishDone] = useState(false);
 
-  // Lightbox state (React-controlled instead of classList)
+  // Lightbox state
   const [lightboxSrc, setLightboxSrc] = useState('');
   const [lightboxOpen, setLightboxOpen] = useState(false);
 
@@ -30,14 +31,14 @@ const Birthday = ({ onNext }) => {
   const containerRef = useRef(null);
 
   const buttons = [
-    { text: "✨ Turn On Lights",      action: "lights"   },
-    { text: "🎵 Play the Music Buddy", action: "music"    },
-    { text: "🎉 Let's Decorate",       action: "banner"   },
-    { text: "🎈 I got you some Balloons", action: "balloons" },
-    { text: "🎂 Cake? Of course!",     action: "cake"     },
-    { text: "🕯️ Light the Candles",   action: "candle"   },
-    { text: "🥳 Happy Birthday!",      action: "wish"     },
-    { text: "💌 A Message for You",    action: "story"    },
+    { text: "✨ Turn On Lights",         action: "lights"   },
+    { text: "🎵 Play the Music Buddy",   action: "music"    },
+    { text: "🎉 Let's Decorate",         action: "banner"   },
+    { text: "🎈 I got you some Balloons",action: "balloons" },
+    { text: "🎂 Cake? Of course!",       action: "cake"     },
+    { text: "🕯️ Light the Candles",     action: "candle"   },
+    { text: "🥳 Happy Birthday!",        action: "wish"     },
+    { text: "💌 A Message for You",      action: "story"    },
   ];
 
   const messages = [
@@ -48,9 +49,9 @@ const Birthday = ({ onNext }) => {
     "Happy Birthday! 🥳",
   ];
 
-  // Loading fade-out
+  // Loading fade-out — show bday image first, then reveal buttons
   useEffect(() => {
-    const timer = setTimeout(() => setLoadingDone(true), 1000);
+    const timer = setTimeout(() => setLoadingDone(true), 2200);
     return () => clearTimeout(timer);
   }, []);
 
@@ -73,11 +74,7 @@ const Birthday = ({ onNext }) => {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const openLightbox = (src) => {
-    setLightboxSrc(src);
-    setLightboxOpen(true);
-  };
-
+  const openLightbox = (src) => { setLightboxSrc(src); setLightboxOpen(true); };
   const closeLightbox = () => setLightboxOpen(false);
 
   const showNextButton = (delay = 800) => {
@@ -90,7 +87,6 @@ const Birthday = ({ onNext }) => {
         setTimeout(() => setLightsOn(true), 800);
         showNextButton(2000);
         break;
-
       case "music":
         if (audioRef.current && !musicPlaying) {
           audioRef.current.play().catch(() => {});
@@ -98,34 +94,28 @@ const Birthday = ({ onNext }) => {
         }
         showNextButton(800);
         break;
-
       case "banner":
         setBannerVisible(true);
         setPhotosVisible(true);
         setTimeout(() => setBalloonsFlying(true), 4800);
         showNextButton(900);
         break;
-
       case "balloons":
         setBalloonsFlying(true);
         showNextButton(2800);
         break;
-
       case "cake":
         setCakeVisible(true);
         showNextButton(900);
         break;
-
       case "candle":
         setCandlesLit(true);
         showNextButton(900);
         break;
-
       case "wish":
         setWishDone(true);
         showNextButton(1400);
         break;
-
       case "story":
         setTimeout(() => {
           const container = containerRef.current;
@@ -136,13 +126,11 @@ const Birthday = ({ onNext }) => {
           setTimeout(() => onNext(), 1200);
         }, 800);
         break;
-
       default:
         break;
     }
   };
 
-  // Balloon config: letter, color pair [body, shine], left%
   const balloonConfig = [
     { letter: 'H', body: '#FF6B6B', shine: '#FFB3B3', left: 8  },
     { letter: 'B', body: '#FFD93D', shine: '#FFF0A0', left: 20 },
@@ -158,9 +146,12 @@ const Birthday = ({ onNext }) => {
       ref={containerRef}
       className={`birthday-container ${lightsOn ? 'lights-on' : ''}`}
     >
-      {/* Loading Screen */}
+      {/* ===== LOADING SCREEN — includes bday image ===== */}
       <div className={`loading ${loadingDone ? 'fade-out' : ''}`}>
-        <span>Loading your special surprise...</span>
+        <div className="loading-inner">
+          <img src={bdayImg} alt="Birthday" className="loading-bday-img" />
+          <span>Loading your special surprise...</span>
+        </div>
       </div>
 
       {/* Audio */}
@@ -182,53 +173,26 @@ const Birthday = ({ onNext }) => {
       {/* ===== BALLOONS ===== */}
       {balloonsFlying && (
         <div className="balloons-scene">
-          {/* Balloon Border strip at bottom */}
-          {/* <div className="balloon-border-strip">
-            <img src={ballonBorder} alt="Balloon Border" />
-          </div> */}
-
-          {/* Individual SVG balloons floating up */}
           {balloonConfig.map((cfg, i) => (
             <div
               key={i}
               className="svg-balloon-wrap"
-              style={{
-                left: `${cfg.left}%`,
-                animationDelay: `${i * 0.1}s`,
-              }}
+              style={{ left: `${cfg.left}%`, animationDelay: `${i * 0.1}s` }}
             >
-              {/* SVG Balloon */}
-              <svg
-                className="svg-balloon"
-                viewBox="0 0 80 110"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* Balloon body */}
+              <svg className="svg-balloon" viewBox="0 0 80 110" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="40" cy="44" rx="32" ry="38" fill={cfg.body} />
-                {/* Shine */}
                 <ellipse cx="29" cy="28" rx="9" ry="13" fill={cfg.shine} opacity="0.55" transform="rotate(-20 29 28)" />
-                {/* Knot */}
                 <ellipse cx="40" cy="82" rx="5" ry="4" fill={cfg.body} />
-                {/* String */}
-                <path
-                  d="M40 86 Q36 96 40 106"
-                  stroke="#999"
-                  strokeWidth="1.5"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-                {/* Letter — only show after wishDone */}
+                <path d="M40 86 Q36 96 40 106" stroke="#999" strokeWidth="1.5" fill="none" strokeLinecap="round" />
                 {wishDone && (
                   <text
-                    x="40"
-                    y="52"
+                    x="40" y="52"
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fontFamily="'Signika', sans-serif"
                     fontWeight="900"
                     fontSize="28"
                     fill="#fff"
-                    style={{ textShadow: 'none' }}
                   >
                     {cfg.letter}
                   </text>
@@ -274,7 +238,6 @@ const Birthday = ({ onNext }) => {
             ))}
           </div>
           <div className="cobertura" />
-
           <div className="bizcocho" />
         </div>
       </div>
@@ -306,7 +269,7 @@ const Birthday = ({ onNext }) => {
         )}
       </div>
 
-      {/* ===== LIGHTBOX (React-controlled) ===== */}
+      {/* ===== LIGHTBOX ===== */}
       {lightboxOpen && (
         <div
           className="lightbox show"
@@ -315,7 +278,6 @@ const Birthday = ({ onNext }) => {
           aria-modal="true"
           aria-label="Zoomed photo"
         >
-          {/* Close button */}
           <button
             className="lightbox-close"
             onClick={(e) => { e.stopPropagation(); closeLightbox(); }}
@@ -323,11 +285,7 @@ const Birthday = ({ onNext }) => {
           >
             ✕
           </button>
-          <img
-            src={lightboxSrc}
-            alt="Zoomed Memory"
-            onClick={(e) => e.stopPropagation()}
-          />
+          <img src={lightboxSrc} alt="Zoomed Memory" onClick={(e) => e.stopPropagation()} />
         </div>
       )}
     </div>
