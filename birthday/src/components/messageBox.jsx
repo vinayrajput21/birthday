@@ -519,7 +519,7 @@ export default function MessageBox() {
 
                 <p className="letter-from">A little something just for you...</p>
 
-                <h1 className="letter-heading">Happy Birthday Bestie 🎉</h1>
+                <h1 className="letter-heading">Happy Birthday Payal 🎉</h1>
                 <p className="letter-sub">— Wishing you all the sparkle in the world —</p>
 
                 <div className="divider">
@@ -536,13 +536,13 @@ export default function MessageBox() {
                 <p className="letter-body">
                   Hold on, don't get too excited yet —<br />
                   something super special is on its way,<br />
-                  picked just for you by your bestie ✨
+                  picked just for you ✨
                 </p>
 
                 <div className="letter-signature">
                   <span className="sig-icons">🌟🎊✨</span>
                   <div>
-                    <p className="sig-text">Your bestie forever,</p>
+                    <p className="sig-text">Your forever,</p>
                     <p className="sig-name">Always got your back 🌸</p>
                   </div>
                 </div>
