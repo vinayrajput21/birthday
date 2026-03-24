@@ -6,8 +6,7 @@ import photo1 from '../assets/images/photo1.jpeg';
 import photo2 from '../assets/images/photo2.jpeg';
 import photo3 from '../assets/images/photo3.jpeg';
 import canZoom from '../assets/images/can-zoom.png';
-import person from '../assets/images/person.jpg';
-import ballonBorder from '../assets/images/Balloon-Border.png';
+
 
 const Birthday = ({ onNext }) => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -274,9 +273,6 @@ const Birthday = ({ onNext }) => {
               <div key={i} className={`fuego ${candlesLit ? 'lit' : ''}`} />
             ))}
           </div>
-          <div className="cobertura" />
-          <img src={person} className="profile-img" alt="Birthday Person" />
-          <div className="bizcocho" />
         </div>
       </div>
 

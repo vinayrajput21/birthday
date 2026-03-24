@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './letter.css';
-import hbd2Audio from '../assets/audio/hbd4.mpeg';
+import hbdAudio from '../assets/audio/hb3.mpeg';
 
-const Letter = ({ onNext }) => {          // Receive onNext as prop
+const Letter = ({ onNext }) => {        
   const [displayedLines, setDisplayedLines] = useState([]);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
@@ -80,24 +80,22 @@ const Letter = ({ onNext }) => {          // Receive onNext as prop
         setCurrentText('');
         setCurrentLineIndex(prev => prev + 1);
       }
-    }, 40);
+    }, 60);
 
     return () => clearInterval(typingInterval);
   }, [currentLineIndex]);
 
   const handleNext = () => {
     setFadeOut(true);
-    
-    // Wait for fade animation to finish, then switch screen
     setTimeout(() => {
-      onNext();        // This will change screen to MessageBox in App.js
+      onNext();      
     }, 800);
   };
 
   return (
     <div className={`letter-container ${fadeOut ? 'fade-out' : ''}`}>
       <audio ref={audioRef} loop>
-              <source src={hbd2Audio} type="audio/mpeg" />
+              <source src={hbdAudio} type="audio/mpeg" />
             </audio>
       <div className="paper">
         <div className="paper-content" ref={contentRef}>

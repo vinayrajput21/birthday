@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-// import hbd2Audio from '../assets/audio/hbd4.mpeg';
+import { useState, useEffect, useRef } from "react";
+import hbdAudio from '../assets/audio/hb3.mpeg';
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@600;700&family=Lato:wght@300;400&display=swap');
@@ -347,15 +347,14 @@ const styles = `
     opacity: 0;
     animation: fadeSlide 0.6s 1.3s ease forwards;
   }
-  .sig-hearts {
+  .sig-icons {
     font-size: 22px;
-    animation: heartbeat 1.5s ease-in-out infinite;
+    animation: bounce 1.8s ease-in-out infinite;
   }
-  @keyframes heartbeat {
-    0%,100% { transform: scale(1); }
-    25% { transform: scale(1.2); }
-    50% { transform: scale(1); }
-    75% { transform: scale(1.15); }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    40% { transform: translateY(-6px); }
+    60% { transform: translateY(-3px); }
   }
   .sig-text {
     font-family: 'Dancing Script', cursive;
@@ -450,6 +449,16 @@ function spawnConfetti() {
 export default function MessageBox() {
   const [opened, setOpened] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.6;
+      audioRef.current.play().catch(() => {
+        console.log("Autoplay blocked by browser");
+      });
+    }
+  }, []);
 
   const handleOpen = () => {
     if (opened) return;
@@ -465,10 +474,9 @@ export default function MessageBox() {
     <>
       <style>{styles}</style>
       <div id="confetti-root" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 99 }} />
-
-      {/* <audio ref={audioRef} loop>
-        <source src={hbd2Audio} type="audio/mpeg" />
-      </audio> */}
+      <audio ref={audioRef} loop>
+        <source src={hbdAudio} type="audio/mpeg" />
+      </audio>
 
       <div className="bday-root">
         {/* Stars */}
@@ -498,7 +506,7 @@ export default function MessageBox() {
                 <div className="env-left" />
                 <div className="env-right" />
                 <div className="env-bottom" />
-                <div className="env-seal">💌</div>
+                <div className="env-seal">🎊</div>
                 <div className="env-flap" />
               </div>
               <p className="tap-hint">✦ Tap to open your letter ✦</p>
@@ -509,10 +517,10 @@ export default function MessageBox() {
                 <div className="ruled-lines" />
                 <span className="corner-tl">✦</span>
 
-                <p className="letter-from">A little something for you...</p>
+                <p className="letter-from">A little something just for you...</p>
 
-                <h1 className="letter-heading">Happy Birthday Again 🎉</h1>
-                <p className="letter-sub">— Wishing you all the magic in the world —</p>
+                <h1 className="letter-heading">Happy Birthday Bestie 🎉</h1>
+                <p className="letter-sub">— Wishing you all the sparkle in the world —</p>
 
                 <div className="divider">
                   <div className="divider-line" />
@@ -526,16 +534,16 @@ export default function MessageBox() {
                 </div>
 
                 <p className="letter-body">
-                  Wait for the surprise...<br />
-                  something very special is on its way,<br />
-                  wrapped with love, just for you 💖
+                  Hold on, don't get too excited yet —<br />
+                  something super special is on its way,<br />
+                  picked just for you by your bestie ✨
                 </p>
 
                 <div className="letter-signature">
-                  <span className="sig-hearts">🌹💕✨</span>
+                  <span className="sig-icons">🌟🎊✨</span>
                   <div>
-                    <p className="sig-text">With all my love,</p>
-                    <p className="sig-name">Always yours 🌸</p>
+                    <p className="sig-text">Your bestie forever,</p>
+                    <p className="sig-name">Always got your back 🌸</p>
                   </div>
                 </div>
               </div>

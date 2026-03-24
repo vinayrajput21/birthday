@@ -5,8 +5,8 @@
 :root {
   --bg-dark: #000000;
   --bg-peach: #FFDAB9;
-  --btn-color: #466baf;
-  --btn-hover: #5a7fc9;
+  --btn-color: #f175bd;
+  --btn-hover: #f175bd;
   --message-color: #C4515C;
 }
 
@@ -454,7 +454,7 @@
   padding: 14px 32px;
   min-width: 280px;
   max-width: 100%;
-  background: linear-gradient(135deg, var(--btn-color), #3a58a0);
+  background: #f175bd;
   color: #fff;
   border: none;
   border-radius: 50px;
@@ -476,7 +476,7 @@
 }
 
 .btn:hover {
-  background: linear-gradient(135deg, var(--btn-hover), #4a68b5);
+  background: #cd52b0;
   transform: translateY(-3px);
   box-shadow: 0 10px 28px rgba(0,0,0,0.4);
 }
