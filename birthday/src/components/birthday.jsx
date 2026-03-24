@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './birthday.css';
-import hbdAudio from '../assets/audio/hbd.mp3';
+import hbdAudio from '../assets/audio/hb3.mpeg';
 import banner from '../assets/images/banner.png';
 import photo1 from '../assets/images/photo1.jpg';
 // import photo2 from '../assets/images/photo2.jpg';
