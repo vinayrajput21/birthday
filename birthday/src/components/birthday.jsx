@@ -14,7 +14,7 @@ import photo9  from '../assets/images/photo9.jpeg';
 import photo10 from '../assets/images/photo10.jpeg';
 import bdayImg from '../assets/images/bday.jpeg';
 import canZoom from '../assets/images/can-zoom.png';
-import balloonBorderImg from '../assets/images/balloon-Border.png';
+import balloonBorderImg from '../assets/images/Balloon-Border.png';
 
 
 const Birthday = ({ onNext }) => {
