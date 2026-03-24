@@ -8,12 +8,13 @@ import photo3  from '../assets/images/photo3.jpeg';
 import photo4  from '../assets/images/photo4.jpeg';
 import photo5  from '../assets/images/photo5.jpeg';
 import photo6  from '../assets/images/photo6.jpeg';
-import photo7  from '../assets/images/photo6.jpeg';
+import photo7  from '../assets/images/photo7.jpeg';
 import photo8  from '../assets/images/photo8.jpeg';
 import photo9  from '../assets/images/photo9.jpeg';
 import photo10 from '../assets/images/photo10.jpeg';
 import bdayImg from '../assets/images/bday.jpeg';
 import canZoom from '../assets/images/can-zoom.png';
+import balloonBorderImg from '../assets/images/balloon-Border.png';
 
 
 const Birthday = ({ onNext }) => {
@@ -22,12 +23,14 @@ const Birthday = ({ onNext }) => {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [cakeVisible, setCakeVisible] = useState(false);
   const [candlesLit, setCandlesLit] = useState(false);
-  const [balloonsFlying, setBalloonsFlying] = useState(false);
+const [balloonsFlying, setBalloonsFlying] = useState(false);
+  const [borderFlying, setBorderFlying] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [loadingDone, setLoadingDone] = useState(false);
   const [photosVisible, setPhotosVisible] = useState(false);
   const [wishDone, setWishDone] = useState(false);
+  
 
   // Lightbox state
   const [lightboxSrc, setLightboxSrc] = useState('');
@@ -119,8 +122,11 @@ const Birthday = ({ onNext }) => {
         showNextButton(900);
         break;
       case "balloons":
-        setBalloonsFlying(true);
-        showNextButton(2800);
+        setBorderFlying(true);
+        setTimeout(() => {
+          setBalloonsFlying(true);
+        }, 1500);
+        showNextButton(4000); // Increased delay to account for the sequence
         break;
       case "cake":
         setCakeVisible(true);
@@ -200,6 +206,11 @@ const Birthday = ({ onNext }) => {
       </div>
 
       {/* ===== BALLOONS ===== */}
+      {borderFlying && (
+        <div className="balloon-border-wrap">
+          <img src={balloonBorderImg} alt="Balloons" className="balloon-border-img" />
+        </div>
+      )}
       {balloonsFlying && (
         <div className="balloons-scene">
           {balloonConfig.map((cfg, i) => (

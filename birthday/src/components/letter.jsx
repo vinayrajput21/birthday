@@ -92,36 +92,37 @@ const Letter = ({ onNext }) => {
     }, 800);
   };
 
-  return (
-    <div className={`letter-container ${fadeOut ? 'fade-out' : ''}`}>
-      <audio ref={audioRef} loop>
-              <source src={hbdAudio} type="audio/mpeg" />
-            </audio>
-      <div className="paper">
-        <div className="paper-content" ref={contentRef}>
-          <div className="lines">
-            {displayedLines.map((line, index) => (
-              <p key={index} className="line typed">{line}</p>
-            ))}
+return (
+  <div className={`letter-container ${fadeOut ? 'fade-out' : ''}`}>
+    <audio ref={audioRef} loop>
+      <source src={hbdAudio} type="audio/mpeg" />
+    </audio>
 
-            {currentText && (
-              <p className="line typing">
-                {currentText}
-                <span className="cursor">|</span>
-              </p>
-            )}
-          </div>
+    <div className="paper">
+      <div className="paper-content" ref={contentRef}>
+        <div className="lines">
+          {displayedLines.map((line, index) => (
+            <p key={index} className="line typed">{line}</p>
+          ))}
+
+          {currentText && (
+            <p className="line typing">
+              {currentText}
+              <span className="cursor">|</span>
+            </p>
+          )}
         </div>
-
-        {/* Final Button - "Last Message For You" */}
-        {showButton && (
-          <button onClick={handleNext} className="next-btn">
-            Last Message For You
-          </button>
-        )}
       </div>
     </div>
-  );
+
+    {/* The button is now below the paper and will be centered by the container's flex settings */}
+    {showButton && (
+      <button onClick={handleNext} className="next-btn">
+        Last Message For You
+      </button>
+    )}
+  </div>
+);
 };
 
 export default Letter;

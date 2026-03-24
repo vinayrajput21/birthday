@@ -1,14 +1,16 @@
 .letter-container {
-  display: flex;
+display: flex;
+  flex-direction: column; /* Stacks paper and button vertically */
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  gap: 30px;
   background-image: url('../assets/images/background.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  padding: 20px;
+padding: 40px 20px;
   overflow: hidden;
 }
 
@@ -156,9 +158,11 @@
 }
 
 .next-btn {
-  position: fixed;
-  bottom: 35px;
-  left: 15%;
+  /* Remove position: fixed and the bottom/left coordinates */
+  position: relative; 
+  display: block;
+  margin: 0 auto; /* Centers it horizontally */
+  
   padding: 14px 34px;
   font-family: 'Quicksand', sans-serif;
   font-size: 15px;
@@ -187,18 +191,11 @@
 
 @media (max-width: 600px) {
   .next-btn {
-    bottom: 20px;
-    right: 16px;
+    /* Resetting previous values to keep it centered */
+    bottom: 0;
+    right: 0;
+    margin-top: 20px;
     padding: 12px 24px;
-    font-size: 13px;
-  }
-}
-
-@media (max-width: 380px) {
-  .next-btn {
-    bottom: 16px;
-    right: 12px;
-    padding: 10px 20px;
-    font-size: 12px;
+    font-size: 14px;
   }
 }
