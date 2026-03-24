@@ -2,9 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import './birthday.css';
 import hbdAudio from '../assets/audio/hb3.mpeg';
 import banner from '../assets/images/banner.png';
-import photo1 from '../assets/images/photo1.jpeg';
-import photo2 from '../assets/images/photo2.jpeg';
-import photo3 from '../assets/images/photo3.jpeg';
+import photo1  from '../assets/images/photo1.jpeg';
+import photo2  from '../assets/images/photo2.jpeg';
+import photo3  from '../assets/images/photo3.jpeg';
+import photo4  from '../assets/images/photo4.jpeg';
+import photo5  from '../assets/images/photo5.jpeg';
+import photo6  from '../assets/images/photo6.jpeg';
+import photo7  from '../assets/images/photo6.jpeg';
+import photo8  from '../assets/images/photo8.jpeg';
+import photo9  from '../assets/images/photo9.jpeg';
+import photo10 from '../assets/images/photo10.jpeg';
 import bdayImg from '../assets/images/bday.jpeg';
 import canZoom from '../assets/images/can-zoom.png';
 
@@ -50,46 +57,43 @@ const Birthday = ({ onNext }) => {
     "Happy Birthday! 🥳",
   ];
 
-  // Loading fade-out — show bday image first, then reveal buttons
+  // 10 photos: 5 left, 5 right
+  const leftPhotos  = [photo1, photo2, photo3, photo4, photo5];
+  const rightPhotos = [photo6, photo7, photo8, photo9, photo10];
+
+  // Loading fade-out
   useEffect(() => {
     const timer = setTimeout(() => setLoadingDone(true), 2200);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-  // Show text for 2 seconds, then switch to image
-  const textTimer = setTimeout(() => setStep(1), 2000);
-  
-  // Show image for another 3 seconds, then show buttons
-  const imgTimer = setTimeout(() => setStep(2), 5000);
-
-  return () => {
-    clearTimeout(textTimer);
-    clearTimeout(imgTimer);
-  };
-}, []);
+    const textTimer = setTimeout(() => setStep(1), 2000);
+    const imgTimer  = setTimeout(() => setStep(2), 5000);
+    return () => { clearTimeout(textTimer); clearTimeout(imgTimer); };
+  }, []);
 
   // Prevent body scroll on mobile
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
+    document.body.style.overflow  = 'hidden';
+    document.body.style.position  = 'fixed';
+    document.body.style.width     = '100%';
     return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
+      document.body.style.overflow  = '';
+      document.body.style.position  = '';
+      document.body.style.width     = '';
     };
   }, []);
 
-  // Close lightbox on Escape key
+  // Close lightbox on Escape
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') setLightboxOpen(false); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const openLightbox = (src) => { setLightboxSrc(src); setLightboxOpen(true); };
-  const closeLightbox = () => setLightboxOpen(false);
+  const openLightbox  = (src) => { setLightboxSrc(src); setLightboxOpen(true);  };
+  const closeLightbox = ()    => setLightboxOpen(false);
 
   const showNextButton = (delay = 800) => {
     setTimeout(() => setCurrentStep(prev => prev + 1), delay);
@@ -135,7 +139,7 @@ const Birthday = ({ onNext }) => {
           const container = containerRef.current;
           if (container) {
             container.style.transition = "opacity 1.2s ease-in-out";
-            container.style.opacity = "0";
+            container.style.opacity    = "0";
           }
           setTimeout(() => onNext(), 1200);
         }, 800);
@@ -155,26 +159,29 @@ const Birthday = ({ onNext }) => {
     { letter: 'Y', body: '#A29BFE', shine: '#D4CFFF', left: 85 },
   ];
 
+  // Rotation alternates for a Polaroid-wall feel
+  const leftRotations  = [-6, 4, -5, 3, -4];
+  const rightRotations = [ 6, -4, 5, -3, 4];
+
   return (
     <div
       ref={containerRef}
       className={`birthday-container ${lightsOn ? 'lights-on' : ''}`}
     >
-      {/* ===== LOADING SCREEN — includes bday image ===== */}
- {step === 0 && (
-      <div className="loading">
-        <div className="loading-inner">
-          <span>Loading your special surprise...</span>
+      {/* ===== LOADING SCREEN ===== */}
+      {step === 0 && (
+        <div className="loading">
+          <div className="loading-inner">
+            <span>Loading your special surprise...</span>
+          </div>
         </div>
-      </div>
-    )}
+      )}
 
-    {/* Step 1: Image Only */}
-    {step === 1 && (
-      <div className="loading">
-        <img src={bdayImg} alt="Birthday" className="loading-bday-img" />
-      </div>
-    )}
+      {step === 1 && (
+        <div className="loading">
+          <img src={bdayImg} alt="Birthday" className="loading-bday-img" />
+        </div>
+      )}
 
       {/* Audio */}
       <audio ref={audioRef} loop>
@@ -230,26 +237,60 @@ const Birthday = ({ onNext }) => {
         <img src={banner} alt="Happy Birthday Banner" />
       </div>
 
-      {/* ===== ALBUM PHOTOS ===== */}
-      {photosVisible && (
-        <>
-          {[
-            { src: photo1, cls: 'album-left-1',  alt: 'Memory 1' },
-            { src: photo2, cls: 'album-right-1', alt: 'Memory 3' },
-            { src: photo3, cls: 'album-right-2', alt: 'Memory 4' },
-            { src: photo1, cls: 'album-left-2',  alt: 'Memory 2' },
-          ].map(({ src, cls, alt }) => (
-            <img
-              key={cls}
-              src={src}
-              className={`album-photo ${cls}`}
-              alt={alt}
-              onClick={() => openLightbox(src)}
-            />
-          ))}
-          <img src={canZoom} className="can-zoom" alt="Click to zoom" />
-        </>
-      )}
+{/* ===== ALBUM PHOTOS — Beautiful Polaroid Wall ===== */}
+{photosVisible && (
+  <>
+    {/* Left Column */}
+    <div className="album-col album-col-left">
+      {leftPhotos.map((src, i) => (
+        <div 
+          key={`left-${i}`}
+          className="polaroid-frame"
+          style={{ 
+            transform: `rotate(${leftRotations[i]}deg)`,
+            animationDelay: `${i * 80}ms`
+          }}
+          onClick={() => openLightbox(src)}
+        >
+          <img 
+            src={src}
+            className="polaroid-photo"
+            alt={`Memory ${i + 1}`}
+          />
+          <div className="polaroid-tape"></div>
+        </div>
+      ))}
+    </div>
+
+    {/* Right Column */}
+    <div className="album-col album-col-right">
+      {rightPhotos.map((src, i) => (
+        <div 
+          key={`right-${i}`}
+          className="polaroid-frame"
+          style={{ 
+            transform: `rotate(${rightRotations[i]}deg)`,
+            animationDelay: `${(i * 80) + 200}ms`
+          }}
+          onClick={() => openLightbox(src)}
+        >
+          <img 
+            src={src}
+            className="polaroid-photo"
+            alt={`Memory ${i + 6}`}
+          />
+          <div className="polaroid-tape"></div>
+        </div>
+      ))}
+    </div>
+
+    {/* Can Zoom Hint */}
+    <div className="can-zoom-hint">
+      <img src={canZoom} alt="Click to zoom" />
+      <span>tap to enlarge memories ✨</span>
+    </div>
+  </>
+)}
 
       {/* ===== CAKE ===== */}
       <div className={`cake-wrapper ${cakeVisible ? 'visible' : ''}`}>
