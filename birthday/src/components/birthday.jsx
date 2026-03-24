@@ -184,9 +184,9 @@ const Birthday = ({ onNext }) => {
       {balloonsFlying && (
         <div className="balloons-scene">
           {/* Balloon Border strip at bottom */}
-          <div className="balloon-border-strip">
+          {/* <div className="balloon-border-strip">
             <img src={ballonBorder} alt="Balloon Border" />
-          </div>
+          </div> */}
 
           {/* Individual SVG balloons floating up */}
           {balloonConfig.map((cfg, i) => (
