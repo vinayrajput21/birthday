@@ -201,7 +201,7 @@
   pointer-events: none;
   display: flex;
   justify-content: center;
-  animation: borderRise 6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  animation: borderRise 9s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
 .balloon-border-img {
