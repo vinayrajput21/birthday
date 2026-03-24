@@ -25,6 +25,7 @@ const Birthday = ({ onNext }) => {
   // Lightbox state
   const [lightboxSrc, setLightboxSrc] = useState('');
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [step, setStep] = useState(0);
 
   const audioRef = useRef(null);
   const messageRefs = useRef([]);
@@ -54,6 +55,19 @@ const Birthday = ({ onNext }) => {
     const timer = setTimeout(() => setLoadingDone(true), 2200);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+  // Show text for 2 seconds, then switch to image
+  const textTimer = setTimeout(() => setStep(1), 2000);
+  
+  // Show image for another 3 seconds, then show buttons
+  const imgTimer = setTimeout(() => setStep(2), 5000);
+
+  return () => {
+    clearTimeout(textTimer);
+    clearTimeout(imgTimer);
+  };
+}, []);
 
   // Prevent body scroll on mobile
   useEffect(() => {
@@ -147,12 +161,20 @@ const Birthday = ({ onNext }) => {
       className={`birthday-container ${lightsOn ? 'lights-on' : ''}`}
     >
       {/* ===== LOADING SCREEN — includes bday image ===== */}
-      <div className={`loading ${loadingDone ? 'fade-out' : ''}`}>
+ {step === 0 && (
+      <div className="loading">
         <div className="loading-inner">
-          <img src={bdayImg} alt="Birthday" className="loading-bday-img" />
           <span>Loading your special surprise...</span>
         </div>
       </div>
+    )}
+
+    {/* Step 1: Image Only */}
+    {step === 1 && (
+      <div className="loading">
+        <img src={bdayImg} alt="Birthday" className="loading-bday-img" />
+      </div>
+    )}
 
       {/* Audio */}
       <audio ref={audioRef} loop>
@@ -212,10 +234,10 @@ const Birthday = ({ onNext }) => {
       {photosVisible && (
         <>
           {[
-            { src: photo1, cls: 'album-left-2',  alt: 'Memory 2' },
-            { src: photo2, cls: 'album-right-1', alt: 'Memory 3' },
             { src: photo1, cls: 'album-left-1',  alt: 'Memory 1' },
+            { src: photo2, cls: 'album-right-1', alt: 'Memory 3' },
             { src: photo3, cls: 'album-right-2', alt: 'Memory 4' },
+            { src: photo1, cls: 'album-left-2',  alt: 'Memory 2' },
           ].map(({ src, cls, alt }) => (
             <img
               key={cls}
