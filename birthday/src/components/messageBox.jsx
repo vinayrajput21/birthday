@@ -532,7 +532,7 @@ export default function MessageBox({ audioRef }) {
         }
       }, 100);
     }
-  }, 10000);
+  }, 15000);
   return () => clearTimeout(timer);
 }, []);
 
