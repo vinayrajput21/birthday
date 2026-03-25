@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import hbdAudio from '../assets/audio/hb3.mpeg';
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@600;700&family=Lato:wght@300;400&display=swap');
@@ -402,6 +401,18 @@ const styles = `
     .gift-text { font-size: 26px; }
     .letter-body { font-size: 16px; }
   }
+    .fade-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+}
+.fade-overlay.active {
+  opacity: 1;
+}
 `;
 
 const STARS = Array.from({ length: 80 }, (_, i) => ({
@@ -446,19 +457,10 @@ function spawnConfetti() {
   }
 }
 
-export default function MessageBox() {
+export default function MessageBox({ audioRef }) {
   const [opened, setOpened] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
-  const audioRef = useRef(null);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.6;
-      audioRef.current.play().catch(() => {
-        console.log("Autoplay blocked by browser");
-      });
-    }
-  }, []);
+  const [fadeOut, setFadeOut] = useState(false);
 
   const handleOpen = () => {
     if (opened) return;
@@ -469,14 +471,31 @@ export default function MessageBox() {
       setTimeout(spawnConfetti, 700);
     }, 850);
   };
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setFadeOut(true);
+    // Fade out audio
+    if (audioRef?.current) {
+      const audio = audioRef.current;
+      const fadeAudio = setInterval(() => {
+        if (audio.volume > 0.05) {
+          audio.volume = Math.max(0, audio.volume - 0.05);
+        } else {
+          audio.volume = 0;
+          audio.pause();
+          clearInterval(fadeAudio);
+        }
+      }, 100);
+    }
+  }, 10000);
+  return () => clearTimeout(timer);
+}, []);
 
   return (
     <>
       <style>{styles}</style>
       <div id="confetti-root" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 99 }} />
-      <audio ref={audioRef} loop>
-        <source src={hbdAudio} type="audio/mpeg" />
-      </audio>
+      <div className={`fade-overlay ${fadeOut ? 'active' : ''}`} />
 
       <div className="bday-root">
         {/* Stars */}

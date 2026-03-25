@@ -142,30 +142,26 @@
   overflow: hidden;
 }
 
+.svg-balloon-wrap:nth-child(2) { --rise-dur: 10s;  --rise-delay: 0.0s;  --sway-dur: 3.0s; }
+.svg-balloon-wrap:nth-child(3) { --rise-dur: 9s;   --rise-delay: 0.35s; --sway-dur: 3.5s; }
+.svg-balloon-wrap:nth-child(4) { --rise-dur: 11s;  --rise-delay: 0.7s;  --sway-dur: 2.8s; }
+.svg-balloon-wrap:nth-child(5) { --rise-dur: 9.5s; --rise-delay: 1.0s;  --sway-dur: 3.3s; }
+.svg-balloon-wrap:nth-child(6) { --rise-dur: 10s;  --rise-delay: 1.35s; --sway-dur: 2.6s; }
+
+@keyframes balloonRise {
+  0%   { opacity: 0; transform: translateY(0); }
+  10%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(-55vh); }  /* stops over cake */
+}
+
 .svg-balloon-wrap {
   opacity: 0;
   position: absolute;
   bottom: -140px;
   width: clamp(55px, 8vw, 85px);
   animation:
-    balloonRise   var(--rise-dur, 9s)  var(--rise-delay, 0s) cubic-bezier(0.33, 0, 0.66, 1) forwards,
-    balloonSway   var(--sway-dur, 3.2s) var(--rise-delay, 0s) ease-in-out infinite;
-  opacity: 0;
-}
-
-.svg-balloon-wrap:nth-child(2)  { --rise-dur: 10s;  --rise-delay: 0.0s;  --sway-dur: 3.0s; }
-.svg-balloon-wrap:nth-child(3)  { --rise-dur: 9s;   --rise-delay: 0.35s; --sway-dur: 3.5s; }
-.svg-balloon-wrap:nth-child(4)  { --rise-dur: 11s;  --rise-delay: 0.7s;  --sway-dur: 2.8s; }
-.svg-balloon-wrap:nth-child(5)  { --rise-dur: 9.5s; --rise-delay: 1.0s;  --sway-dur: 3.3s; }
-.svg-balloon-wrap:nth-child(6)  { --rise-dur: 10s;  --rise-delay: 1.35s; --sway-dur: 2.6s; }
-.svg-balloon-wrap:nth-child(7)  { --rise-dur: 9s;   --rise-delay: 1.7s;  --sway-dur: 3.6s; }
-.svg-balloon-wrap:nth-child(8)  { --rise-dur: 11s;  --rise-delay: 2.0s;  --sway-dur: 3.1s; }
-
-@keyframes balloonRise {
-  0%   { opacity: 0; transform: translateY(0); }
-  10%  { opacity: 1; }
-  90%  { opacity: 0.85; }
-  100% { opacity: 0;   transform: translateY(-115vh); }
+    balloonRise  var(--rise-dur, 9s)  var(--rise-delay, 0s) cubic-bezier(0.33, 0, 0.66, 1) forwards,
+    balloonSway  var(--sway-dur, 3.2s) var(--rise-delay, 0s) ease-in-out infinite;
 }
 
 @keyframes balloonSway {

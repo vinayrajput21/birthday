@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './letter.css';
-import hbdAudio from '../assets/audio/hb3.mpeg';
 
 const Letter = ({ onNext }) => {        
   const [displayedLines, setDisplayedLines] = useState([]);
@@ -10,7 +9,6 @@ const Letter = ({ onNext }) => {
   const [fadeOut, setFadeOut] = useState(false);
 
   const contentRef = useRef(null);
-  const audioRef = useRef(null);
 
   const fullLines = [
     "Happy Birthday to Pinki ji, Payal ji aur Paahil ji 🤍",
@@ -42,14 +40,6 @@ const Letter = ({ onNext }) => {
     "par dil se ekdum special ✨"
   ];
 
-    useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.6;
-      audioRef.current.play().catch(() => {
-        console.log("Autoplay blocked by browser");
-      });
-    }
-  }, []);
   // Auto scroll while typing
   useEffect(() => {
     if (contentRef.current) {
@@ -94,9 +84,6 @@ const Letter = ({ onNext }) => {
 
 return (
   <div className={`letter-container ${fadeOut ? 'fade-out' : ''}`}>
-    <audio ref={audioRef} loop>
-      <source src={hbdAudio} type="audio/mpeg" />
-    </audio>
 
     <div className="paper">
       <div className="paper-content" ref={contentRef}>

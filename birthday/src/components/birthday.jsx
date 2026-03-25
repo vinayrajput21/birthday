@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './birthday.css';
-import hbdAudio from '../assets/audio/hb3.mpeg';
 import banner from '../assets/images/banner.png';
 import photo1  from '../assets/images/photo1.jpeg';
 import photo2  from '../assets/images/photo2.jpeg';
@@ -17,7 +16,7 @@ import canZoom from '../assets/images/can-zoom.png';
 import balloonBorderImg from '../assets/images/Balloon-Border.png';
 
 
-const Birthday = ({ onNext }) => {
+const Birthday = ({ onNext,audioRef }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [lightsOn, setLightsOn] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
@@ -36,8 +35,6 @@ const [balloonsFlying, setBalloonsFlying] = useState(false);
   const [lightboxSrc, setLightboxSrc] = useState('');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [step, setStep] = useState(0);
-
-  const audioRef = useRef(null);
   const messageRefs = useRef([]);
   const containerRef = useRef(null);
 
@@ -155,15 +152,13 @@ const [balloonsFlying, setBalloonsFlying] = useState(false);
     }
   };
 
-  const balloonConfig = [
-    { letter: 'H', body: '#FF6B6B', shine: '#FFB3B3', left: 8  },
-    { letter: 'B', body: '#FFD93D', shine: '#FFF0A0', left: 20 },
-    { letter: 'D', body: '#6BCB77', shine: '#B3F0BA', left: 33 },
-    { letter: 'B', body: '#4D96FF', shine: '#A8CBFF', left: 46 },
-    { letter: 'A', body: '#FF6BCC', shine: '#FFB3EA', left: 59 },
-    { letter: 'B', body: '#FF9F43', shine: '#FFD4A0', left: 72 },
-    { letter: 'Y', body: '#A29BFE', shine: '#D4CFFF', left: 85 },
-  ];
+const balloonConfig = [
+  { letter: 'P', body: '#FF6B6B', shine: '#FFB3B3', left: 15 },
+  { letter: 'A', body: '#FFD93D', shine: '#FFF0A0', left: 30 },
+  { letter: 'Y', body: '#6BCB77', shine: '#B3F0BA', left: 45 },
+  { letter: 'A', body: '#4D96FF', shine: '#A8CBFF', left: 60 },
+  { letter: 'L', body: '#FF6BCC', shine: '#FFB3EA', left: 75 },
+];
 
   // Rotation alternates for a Polaroid-wall feel
   const leftRotations  = [-6, 4, -5, 3, -4];
@@ -189,10 +184,6 @@ const [balloonsFlying, setBalloonsFlying] = useState(false);
         </div>
       )}
 
-      {/* Audio */}
-      <audio ref={audioRef} loop>
-        <source src={hbdAudio} type="audio/mpeg" />
-      </audio>
 
       {/* ===== STRING LIGHTS ===== */}
       <div className={`string-lights ${lightsOn ? 'on' : ''}`}>
