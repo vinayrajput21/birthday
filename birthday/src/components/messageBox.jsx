@@ -401,7 +401,7 @@ const styles = `
     .gift-text { font-size: 26px; }
     .letter-body { font-size: 16px; }
   }
-    .fade-overlay {
+.fade-overlay {
   position: fixed;
   inset: 0;
   background: #000;
@@ -409,9 +409,54 @@ const styles = `
   pointer-events: none;
   opacity: 0;
   transition: opacity 2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .fade-overlay.active {
   opacity: 1;
+}
+
+.fade-finale {
+  text-align: center;
+  animation: finaleRise 1.5s 1.5s ease forwards;
+  opacity: 0;
+}
+
+.fade-wish {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(36px, 8vw, 80px);
+  background: linear-gradient(135deg, #f9a8d4, #c084fc, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.fade-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(48px, 12vw, 110px);
+  font-weight: 700;
+  background: linear-gradient(135deg, #fde68a, #fb923c, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.fade-sub {
+  font-family: 'Lato', sans-serif;
+  font-size: clamp(13px, 2.5vw, 18px);
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 2px;
+  font-weight: 300;
+}
+
+@keyframes finaleRise {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 `;
 
@@ -495,8 +540,15 @@ export default function MessageBox({ audioRef }) {
     <>
       <style>{styles}</style>
       <div id="confetti-root" style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 99 }} />
-      <div className={`fade-overlay ${fadeOut ? 'active' : ''}`} />
-
+<div className={`fade-overlay ${fadeOut ? 'active' : ''}`}>
+  {fadeOut && (
+    <div className="fade-finale">
+      <p className="fade-wish">Happy Birthday</p>
+      <p className="fade-name">Payal 🎂</p>
+      <p className="fade-sub">✨ Wishing you the most magical day ✨</p>
+    </div>
+  )}
+</div>
       <div className="bday-root">
         {/* Stars */}
         <div className="stars">
