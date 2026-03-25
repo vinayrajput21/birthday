@@ -735,7 +735,6 @@
 .album-col-right .polaroid-frame:nth-child(4) { --rot: -4deg; }
 .album-col-right .polaroid-frame:nth-child(5) { --rot: 5deg; }
 
-/* Can Zoom Hint - Improved */
 .can-zoom-hint {
   position: fixed;
   right: 125px;
@@ -775,43 +774,32 @@
   50%       { transform: translateY(-8px); opacity: 1;    }
 }
 
+@keyframes hintFloatMobile {
+  0%, 100% { transform: translateX(-50%) translateY(0px);  opacity: 0.85; }
+  50%       { transform: translateX(-50%) translateY(-8px); opacity: 1;    }
+}
+
 @keyframes hintGlow {
   0%, 100% { filter: drop-shadow(0 6px 16px rgba(255, 150, 220, 0.4)); }
   50%       { filter: drop-shadow(0 8px 24px rgba(255, 150, 220, 0.9)); }
 }
 
-/* Tablet */
-@media (max-width: 768px) {
-  .can-zoom-hint {
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    top: auto;
-    bottom: 90px;
-  }
-}
-
-/* Mobile */
-@media (max-width: 480px) {
-  .can-zoom-hint {
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    top: auto;
-    bottom: 85px;
-  }
-
-  .can-zoom-hint img   { width: 52px; }
-  .can-zoom-hint span  { font-size: 11px; padding: 4px 10px; }
-}
-
-/* Responsive Adjustments */
 @media (max-width: 900px) {
   .album-col { width: 96px; gap: 14px; }
   .polaroid-frame { width: 88px; padding: 8px 8px 24px; }
   .polaroid-photo { height: 90px; }
   .can-zoom-hint { right: 102px; }
   .can-zoom-hint img { width: 64px; }
+}
+
+@media (max-width: 768px) {
+  .can-zoom-hint {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 90px;
+    animation: hintFloatMobile 3s ease-in-out infinite;
+  }
 }
 
 @media (max-width: 600px) {
@@ -827,7 +815,30 @@
   .polaroid-photo { height: 68px; }
   .polaroid-tape { width: 34px; height: 14px; top: -6px; }
 
-  .can-zoom-hint { display: none; } /* Too crowded on very small screens */
+  /* ✅ REMOVED display:none — now shows centered above button */
+  .can-zoom-hint {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 85px;
+    animation: hintFloatMobile 3s ease-in-out infinite;
+  }
+
+  .can-zoom-hint img  { width: 44px; }
+  .can-zoom-hint span { font-size: 10px; padding: 4px 10px; }
+}
+
+@media (max-width: 480px) {
+  .can-zoom-hint {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 85px;
+    animation: hintFloatMobile 3s ease-in-out infinite;
+  }
+
+  .can-zoom-hint img  { width: 40px; }
+  .can-zoom-hint span { font-size: 10px; padding: 3px 9px; }
 }
 
 @media (max-width: 380px) {
@@ -835,7 +846,6 @@
   .polaroid-frame { width: 54px; padding: 5px 5px 16px; }
   .polaroid-photo { height: 56px; }
 }
-
 /* ══════════════════════════════════════════════════════════
    RESPONSIVE — MOBILE  (≤ 600px)
 ══════════════════════════════════════════════════════════ */
